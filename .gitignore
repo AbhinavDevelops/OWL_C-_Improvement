@@ -2,3 +2,4 @@ datasets/
 myenv/
 build/
 __pycache__/
+.vscode/
