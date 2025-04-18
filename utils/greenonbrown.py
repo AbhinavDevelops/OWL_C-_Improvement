@@ -62,11 +62,14 @@ class GreenOnBrown:
             threshold_out = cv2.adaptiveThreshold(output, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV,
                                                   31, 2)
             # threshold_out = cv2.threshold(output, exg_min, exg_max, cv2.THRESH_BINARY)
-            threshold_out = cv2.morphologyEx(threshold_out, cv2.MORPH_CLOSE, self.kernel, iterations=1)
+            threshold_out = cv2.morphologyEx(
+                threshold_out, cv2.MORPH_CLOSE, self.kernel, iterations=1)
         else:
-            threshold_out = cv2.morphologyEx(output, cv2.MORPH_CLOSE, self.kernel, iterations=5)
+            threshold_out = cv2.morphologyEx(
+                output, cv2.MORPH_CLOSE, self.kernel, iterations=5)
 
-        contours, _ = cv2.findContours(threshold_out, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(
+            threshold_out, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         for c in contours:
             if cv2.contourArea(c) > min_detection_area:
@@ -80,8 +83,10 @@ class GreenOnBrown:
                 startX, startY, boxW, boxH = box
                 endX = startX + boxW
                 endY = startY + boxH
-                cv2.putText(image_out, label, (startX, startY + 30), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
-                cv2.rectangle(image_out, (int(startX), int(startY)), (endX, endY), (0, 0, 255), 2)
+                cv2.putText(image_out, label, (startX, startY + 30),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
+                cv2.rectangle(image_out, (int(startX), int(
+                    startY)), (endX, endY), (0, 0, 255), 2)
 
             return contours, boxes, weed_centres, image_out
 
