@@ -3,3 +3,7 @@ myenv/
 build/
 __pycache__/
 .vscode/
+weedset*/
+predicted/
+exp10-new
+runs/

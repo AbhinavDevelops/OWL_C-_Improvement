@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     /* ───── configuration ───── */
     std::string videoSrc = (argc > 1) ? argv[1] : "0"; // “0” = default cam
     bool saveVideo = true;                             // set true to write MP4
-    const std::string outFile = "datasets/videos_output/gob_bench.mp4";
+    const std::string outFile = "../datasets/videos_output/gob_bench.mp4";
 
     const int exg_min = 30, exg_max = 250;
     const int min_detection_area = 100;
@@ -133,6 +133,9 @@ int main(int argc, char **argv)
         double ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
         algoTimeMs += ms;
         ++frameCount;
+        double fps_frame = 1000.0 / ms;
+        std::string fps_text = "FPS: " + std::to_string(static_cast<int>(fps_frame));
+        cv::putText(frame, fps_text, cv::Point(20, 40), cv::FONT_HERSHEY_SIMPLEX, 1.0, {0, 255, 0}, 2);
 
         std::cout << "\rFrame " << frameCount
                   << " | weeds: " << weeds
@@ -141,7 +144,7 @@ int main(int argc, char **argv)
         if (saveVideo && writer.isOpened())
             writer.write(frame);
         //  optional live view (commented to keep timing clean)
-        //  cv::imshow("GOB Video", frame);
+        // cv::imshow("GOB Video", frame);
         //  if (cv::waitKey(1) == 27) break;   // ESC
     }
 

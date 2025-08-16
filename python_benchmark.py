@@ -13,11 +13,11 @@ from pathlib import Path
 # 1 | CONFIGURATION
 # ──────────────────────────────────────────────────────────────────────────────
 # 0 = default camera, or "field_clip.mp4"
-VIDEO_SRC = "datasets/videos/green_on_fallow.mp4"
+VIDEO_SRC = "datasets/stuart_data/GOPR1088.mp4"
 WARMUP_FRM = 30                   # ignore first N frames for stabilisation
 MAX_FRAMES = 300                  # timed frames; set None for “run until EOF”
 SAVE_OUT = True               # True = write annotated video
-OUT_FILE = "datasets/videos_output/bench_output.mp4"   # if SAVE_OUT is True
+OUT_FILE = "datasets/videos_output/bench_output_1.mp4"   # if SAVE_OUT is True
 
 PARAMS = {                         # your ExG thresholds & options
     'exg_min': 30, 'exg_max': 250,
@@ -79,6 +79,13 @@ def run_benchmark():
         counted += 1
 
         if SAVE_OUT and writer is not None:
+            # Ensure annotated is 3-channel BGR for VideoWriter
+            if len(annotated.shape) == 2 or annotated.shape[2] == 1:
+                annotated = cv2.cvtColor(annotated, cv2.COLOR_GRAY2BGR)
+            fps_now = 1.0 / (t1 - t0)
+            cv2.putText(annotated, f"{fps_now:5.1f} FPS",
+                        (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
+                        (0, 255, 0), 2, cv2.LINE_AA)
             writer.write(annotated)
 
         # optional live FPS overlay (not used for timing)
